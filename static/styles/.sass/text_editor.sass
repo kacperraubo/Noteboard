@@ -1,0 +1,94 @@
+@use './abstracts' as ab
+@import './utils/keyframes'
+
+.text-editor-container
+    @include ab.flex($direction: column)
+    width: 100%
+    height: 100vh
+    padding: 0 ab.$space-6 ab.$space-6 ab.$space-6
+
+    .text-area
+        @include ab.flex($direction: column)
+        position: relative
+        flex-grow: 1
+        height: calc(100vh - ab.$nav-height)
+        width: 100%
+
+        textarea, .text-area-for-searching
+            @include ab.thin-scrollbar
+            @include ab.transition-all
+            flex-grow: 1
+            max-height: 100%
+            width: 100%
+            border: 1px solid ab.$neutral-300
+            border-radius: ab.$rounded-md
+            padding: ab.$space-8 ab.$space-12 ab.$space-16 ab.$space-12
+            background-color: ab.$neutral-50
+            color: ab.$neutral-600
+            resize: none
+            outline: none
+            overflow: auto
+
+            &:active, &:focus
+                border-color: ab.$neutral-400
+
+            .highlight
+                background-color: ab.$primary-100
+                color: ab.$primary-600
+
+        .text-loading-icon
+            position: absolute
+            @include ab.transform-center
+            animation: spin 1s linear infinite
+
+    .canvas-wrapper
+        position: relative
+        flex-grow: 1
+        height: calc(100vh - ab.$nav-height)
+        width: 100%
+        overflow: hidden
+
+        .canvas-loading-icon
+            position: absolute
+            @include ab.transform-center
+            animation: spin 1s linear infinite
+            z-index: 1
+
+        .zoom-buttons
+            @include ab.transform-half-x-axis
+            @include ab.flex($gap: ab.$space-2)
+            position: absolute
+            top: ab.$space-5
+
+            button
+                @include ab.transition-all
+                @include ab.flex($justify: center, $align: center)
+                padding: ab.$space-2
+                border-radius: ab.$rounded-sm
+                background-color: ab.$neutral-800
+
+                .icon
+                    width: ab.$space-5
+                    height: ab.$space-5
+                    color: ab.$neutral-50
+
+                &:hover
+                    background-color: ab.$neutral-900
+
+        .canvas-container
+            @include ab.flex($direction: column)
+            scrollbar-width: thin
+            position: relative
+            width: 100%
+            height: 100%
+            border: 1px solid ab.$neutral-300
+            border-radius: ab.$rounded-md
+            background-color: ab.$neutral-50
+            overflow: auto
+
+            .overlay
+                position: absolute
+                pointer-events: none
+
+    @include ab.mobile
+        padding: 0 ab.$space-4 ab.$space-4 ab.$space-4

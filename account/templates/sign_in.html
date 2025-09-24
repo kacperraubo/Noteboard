@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+    {% autoescape off %}
+        {{ meta_tags }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block refs %}
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="auth-page-wrapper">
+        <div class="auth-page-container">
+            <div class="logo">
+                <img class="image" src="{% static 'images/logo.png' %}" alt="Noteboard logo">
+                <div class="text">
+                    Noteboard
+                </div>
+            </div>
+            <form action="{% url 'sign_in_view' %}" method="post">
+                {% csrf_token %}
+
+                <div class="inputs">
+                    {% include "form.html" with form=form %}
+                    <button type="submit" class="button">
+                        Sign in
+                    </button>
+                </div>
+            </form>
+            <div class="footer">
+                Don't have an Account?
+                <a class="link" href="{% url 'sign_up_view' %}">Sign up</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+        <script>
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]');
+        </script>
+{% endblock %}

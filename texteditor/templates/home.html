@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load util %}
+{% load icons %}
+
+{% block meta %}
+    {% autoescape off %}
+        {{ meta_tags }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block refs %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+    <input type="hidden" name="current-folder-id" value="{{ current_folder.id }}">
+    <div class="home-page-container">
+        {% csrf_token %}
+    
+        <div class="navbar">
+            <div class="resource-history">
+                <a 
+                    href="{% url 'home' %}" 
+                    class="root-folder resource folder {% if not previous_folders and not current_folder %}current{% endif %}"
+                    data-token=""
+                >
+                    <div class="name">
+                        Noteboard
+                    </div>
+                </a>
+
+                {% if previous_folders or current_folder %}
+                    <span class="separator {% if not previous_folders %}last-separator{% endif %}">•</span>
+                {% endif %}
+
+                {% for folder in previous_folders %}
+                    <a 
+                        href="{% url 'home' folder.token %}" 
+                        class="resource folder"
+                        data-token="{{ folder.token }}"
+                    >
+                        <div class="name">
+                            {{ folder.name }}
+                        </div>
+                    </a>
+
+                    {% if not forloop.last %}
+                        <span class="separator">/</span>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if current_folder %}
+                    {% if previous_folders %}
+                        <span class="separator last-separator">/</span>
+                    {% endif %}
+
+                    <div 
+                        class="current resource"
+                        data-token="{{ current_folder.token }}"
+                    >
+                        <div class="name">
+                            {{ current_folder.name }}
+                        </div>
+                        <button 
+                            class="edit-button"
+                            data-id="{{ current_folder.id }}"
+                            data-token="{{ current_folder.token }}"
+                        >
+                            {% icon 'edit-2' 'icon' %}
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout_view' %}" class="logout-button" onclick="return confirm('Are you sure you want to logout?');">
+                    {% icon 'log-out' 'icon' %}
+                    <span>Logout</span>
+                </a>
+            {% else %}
+                <a href="{% url 'sign_in_view' %}" class="login-button">
+                    {% icon 'log-in' 'icon' %}
+                    <span>Login</span>
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="notes">
+            {% if resources %}
+                <ul class="resource-list">
+                    {% for resource in resources %}
+                        {% if resource|get_type == 'folder' %}
+                            {% url 'home' resource.token as open_url %}
+                        {% else %}
+                            {% url 'text_editor_room' resource.token resource.room.name as open_url %}
+                        {% endif %}
+
+                        <li 
+                            class="resource {{ resource|get_type }}"
+                            data-id="{{ resource.id }}"
+                            data-name="{{ resource.name }}"
+                            data-token="{{ resource.token }}"
+                            data-type="{{ resource|get_type }}"
+                            data-open-url="{{ open_url }}"
+                        > 
+                            {% if resource.text_file %}
+                                <a href="{{ resource.text_file }}" class="file-link hidden" download></a>
+                            {% endif %}
+
+                            <div class="options-container">
+                                <button class="select-button option">
+                                    {% icon 'square' 'not-selected-icon icon' %}
+                                    {% icon 'check-square' 'selected-icon icon hidden' %}
+                                </button>
+                                <button class="move-button option unavailable-when-selecting" draggable="true">
+                                    {% icon 'menu' 'icon' %}
+                                </button>
+                            </div>
+                            <div class="name-container">
+                                <div class="type-icon">
+                                    {% if resource|get_type == 'folder' %}
+                                        {% icon 'folder' 'icon' %}
+                                    {% else %}
+                                        {% icon 'file-text' 'icon' %}
+                                    {% endif %}
+                                </div>
+                                <a 
+                                    href="{{ open_url }}" 
+                                    class="name"
+                                    data-token="{{ resource.token }}"
+                                >
+                                    {{ resource.name }}
+                                </a>
+                                <button class="edit-button option unavailable-when-selecting">
+                                    {% icon 'edit-2' 'icon' %}
+                                </button>
+                            </div>
+
+                            {% if resource.user == user or not user.is_authenticated %}
+                                <form 
+                                    class="hidden delete-form" 
+                                    action="{% url 'delete_resource' resource.id resource.token %}" 
+                                    method="post"
+                                    id="delete-form-{{ resource.id }}-{{ resource.token }}"
+                                    onsubmit="return confirm('Are you sure you want to delete this item?');"
+                                >
+                                    {% csrf_token %}
+                                </form>
+                                <button type="submit" class="delete-button option unavailable-when-selecting" form="delete-form-{{ resource.id }}-{{ resource.token }}">
+                                    {% icon 'trash-2' 'icon' %}
+                                </button>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <div class="empty-state hidden">
+                    <div class="icon">
+                        {% icon 'folder' 'icon' %}
+                    </div>
+                    <div class="text">
+                        This folder is empty
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="icon">
+                        {% icon 'folder' 'icon' %}
+                    </div>
+                    <div class="text">
+                        This folder is empty
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="no-search-results hidden">
+                <div class="icon">
+                    {% icon 'minus-square' 'icon' %}
+                </div>
+                <div class="text">
+                    No results found
+                </div>
+            </div>
+        </div>
+
+        <div class="task-bar">
+            <button class="option select-all-button">
+                {% icon 'square' 'not-selected-icon icon' %}
+                {% icon 'check-square' 'selected-icon icon hidden' %}
+            </button>
+            <button class="option download-button hidden requires-selection requires-note-selection">
+                {% icon 'download' 'icon' %}
+            </button>
+            <button class="option delete-button hidden requires-selection">
+                {% icon 'trash-2' 'icon' %}
+            </button>
+            <input type="text" class="search-bar" placeholder="Search">
+            <button class="option create-folder-button" title="Create folder">
+                {% icon 'folder-plus' 'icon' %}
+            </button>
+            <button class="option create-note-button" title="Create note">
+                {% icon 'file-plus' 'icon' %}
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const folderHistory = document.querySelector('.resource-history');
+        folderHistory.scrollLeft = folderHistory.scrollWidth;
+    </script>
+    <script type="text/javascript" src="{% static 'scripts/utilities/createElementDOM.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/utilities/helpers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/eventListeners.js' %}"></script>
+    <script type="module" src="{% static 'scripts/taskbar.js' %}"></script>
+    <script type="module" src="{% static 'scripts/home/dragAndDrop.js' %}"></script>
+    <script type="module" src="{% static 'scripts/home/editName.js' %}"></script>
+    <script type="module" src="{% static 'scripts/home/select.js' %}"></script>
+    <script type="module" src="{% static 'scripts/home/search.js' %}"></script>
+{% endblock %}

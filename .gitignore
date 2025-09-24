@@ -1,0 +1,10 @@
+.vscode
+.venv
+.ebextensions
+.github
+.platform
+
+__pycache__
+*.pyc
+*.ps1
+*.zip

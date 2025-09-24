@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load icons %}
+
+{% block meta %}
+    {% autoescape off %}
+        {{ meta_tags }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block refs %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/css/text_editor.css' %}">
+{% endblock %}
+
+{% block content %}
+    <input type="hidden" name="current-folder-id" value="{% if note.folder %}{{ note.folder.id }}{% endif %}">
+    <input type="hidden" name="note-name" value="{{ note.name }}">
+    <input type="hidden" name="room-id" value="{{ room.id }}">
+    <input type="hidden" name="note-id" value="{{ note.id }}">
+    <input type="hidden" name="is-users-room" value="{% if is_users_room %}true{% else %}false{% endif %}">
+    <input type="hidden" name="note-token" value="{{ note.token }}">
+
+    <div class="text-editor-container">
+        {% csrf_token %}
+
+        <div class="navbar {% if is_users_room %}space-between{% endif %}">
+            <div class="options">
+                {% if is_users_room %}
+                    <div class="privacy-settings">
+                        <div 
+                            class="privacy-setting view-setting {% if not room.is_public %}active{% endif %} pointer" 
+                            data-is-viewable="{% if room.is_public %}true{% else %}false{% endif %}"
+                            {% if not user.is_authenticated %}title="Login to make this note public."{% endif %}
+                        >
+                            {% if room.is_public %}
+                                {% icon 'eye-off' 'icon active-icon hidden' style="stroke-width: 1" %}
+                                {% icon 'eye' 'icon inactive-icon' %}
+                            {% else %}
+                                {% icon 'eye-off' 'icon active-icon' %}
+                                {% icon 'eye' 'icon inactive-icon hidden' %}
+                            {% endif %}
+                            <span>View</span>
+                        </div>
+                        <div 
+                            class="privacy-setting edit-setting {% if not room.is_editable %}active{% endif %} pointer" 
+                            data-is-editable="{% if room.is_editable %}true{% else %}false{% endif %}"
+                            {% if not user.is_authenticated %}title="Login to make this note editable."{% endif %}
+                        >
+                            {% if room.is_editable %}
+                                {% icon 'edit-cross' 'icon active-icon hidden' %}
+                                {% icon 'edit-2' 'icon inactive-icon' %}
+                            {% else %}
+                                {% icon 'edit-cross' 'icon active-icon' %}
+                                {% icon 'edit-2' 'icon inactive-icon hidden' %}
+                            {% endif %}
+                            <span>Edit</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="resource-history">
+                {% if is_users_room %}
+                    <a 
+                        href="{% url 'home' %}" 
+                        class="root-folder resource"
+                        data-token=""
+                    >
+                        Noteboard
+                    </a>
+
+                    {% if previous_folders %}
+                        <span class="separator {% if not previous_folders %}last-separator{% endif %}">•</span>
+                    {% endif %}
+
+                    {% for folder in previous_folders %}
+                        <a 
+                            href="{% url 'home' folder.token %}" 
+                            class="resource"
+                            data-token="{{ folder.token }}"
+                        >
+                            {{ folder.name }}
+                        </a>
+
+                        {% if not forloop.last %}
+                            <span class="separator">/</span>
+                        {% endif %}
+                    {% endfor %}
+
+                    <span class="separator last-separator">•</span>
+                {% else %}
+                    <a 
+                        href="{% url 'home' %}" 
+                        class="root-folder resource"
+                        data-token=""
+                    >
+                        noteboard
+                    </a>
+                    <span class="separator last-separator">•</span>
+                {% endif %}
+
+                <div 
+                    class="current resource"
+                >
+                    <div class="name">
+                        {{ note.name }}
+                    </div>
+
+                    {% if is_users_room %}
+                        <button 
+                            class="edit-button"
+                            data-id="{{ note.id }}"
+                            data-token="{{ note.token }}"
+                        >
+                            {% icon 'edit-2' 'icon' %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout_view' %}" class="logout-button" onclick="return confirm('Are you sure you want to logout?');">
+                    {% icon 'log-out' 'icon' %}
+                    <span>Logout</span>
+                </a>
+            {% else %}
+                <a href="{% url 'sign_in_view' %}" class="login-button">
+                    {% icon 'log-in' 'icon' %}
+                    <span>Login</span>
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="text-area">
+            <div class="text-area-for-searching hidden" title="Remove search query to start editing."></div>
+            <textarea 
+                class="editor-text-area" 
+                rows="10"
+                disabled
+            ></textarea>
+            {% icon 'loader' 'text-loading-icon' %}
+        </div>
+
+        <div class="canvas-wrapper hidden">
+            {% icon 'loader' 'canvas-loading-icon' %}
+            <div class="canvas-container">
+                <canvas class="canvas" width="4096" height="4096"></canvas>
+                <canvas class="overlay" width="4096" height="4096"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="task-bar fixed">
+        <button class="option switch-mode-button {% if not user.is_authenticated and is_users_room %}hidden{% endif %}" title="Switch to canvas mode">
+            {% icon 'pen-tool' 'icon' %}
+        </button>
+
+        <button class="option download-button">
+            {% icon 'download' 'icon' %}
+        </button>
+        
+        {% if is_users_room %}
+            <form 
+                class="hidden" 
+                id="delete-form" 
+                action="{% url 'delete_resource' note.id note.token %}" method="POST"
+                onsubmit="return confirm('Are you sure you want to delete this note?');"
+            >
+                {% csrf_token %}
+            </form>
+            <button class="option delete-button" type="submit" form="delete-form">
+                {% icon 'trash-2' 'icon' %}
+            </button>
+        {% endif %}
+
+        <input type="text" class="search-bar" placeholder="Search">
+        
+        <div class="canvas-options hidden">
+            <div class="export-options-container container hidden">
+                <span>Select area to export, or export the whole canvas</span>
+                <button class="export-button option">
+                    {% icon 'download' 'icon' %}
+                </button>
+                <button class="cancel-export-button option">
+                    {% icon 'x' 'icon' %}
+                </button>
+            </div>
+
+            {% if is_users_room or room.is_editable %}
+                <div class="pen-options-container container">
+                    <input type="number" name="pen-size" class="pen-size" value="1" min="1" max="100">
+                    <div class="color-picker pen-color-picker">
+                        <input type="hidden" name="pen-color" value="#232B3C">
+                    </div>
+                    <div class="select-pen">
+                        {% icon 'pen-tool' 'icon' %}
+                    </div>
+                </div>
+                <div class="eraser-options-container container">
+                    <input type="number" name="eraser-size" class="eraser-size" value="1" min="1" max="100">
+                    <div class="select-eraser">
+                        {% icon 'eraser' 'icon' %}
+                    </div>
+                </div>
+                <div class="text-options-container container">
+                    <input type="number" name="text-size" class="text-size" value="16" min="1" max="100">
+                    <div class="color-picker text-color-picker">
+                        <input type="hidden" name="text-color" value="#232B3C">
+                    </div>
+                    <div class="select-text">
+                        {% icon 'type' 'icon' %}
+                    </div>
+                </div>
+                <div class="image-options-container container">
+                    <div class="select-image">
+                        {% icon 'image' 'icon' %}
+                    </div>
+                </div>
+                <div class="background-options-container container">
+                    <div class="color-picker background-color-picker">
+                        <input type="hidden" name="background-color" value="{% if note.canvas.background %}{{ note.canvas.background }}{% else %}#FBFCFF{% endif %}">
+                    </div>
+                    <div class="text">
+                        Background
+                    </div>
+                </div>
+                <div class="shape-options-container container">
+                    <div class="color-picker shape-color-picker">
+                        <input type="hidden" name="shape-color" value="#232B3C">
+                    </div>
+                    <select class="shape-select">
+                        <option disabled selected value>Select a shape</option>
+                        <option value="rectangle">Rectangle</option>
+                        <option value="circle">Circle</option>
+                        <option value="triangle">Triangle</option>
+                    </select>
+                </div>
+                <div class="global-options-container container">
+                    <button class="option pointer clear-button" title="Clear canvas">
+                        {% icon 'refresh-ccw' 'icon' %}
+                    </button>
+                    <button class="option pointer disabled undo-button" title="Undo">
+                        {% icon 'rotate-ccw' 'icon' %}
+                    </button>
+                    <button class="option pointer disabled redo-button" title="Redo">
+                        {% icon 'rotate-cw' 'icon' %}
+                    </button>
+                </div>
+            {% endif %}
+            
+            <div class="zoom-options-container container">
+                <button class="zoom-out-button option">
+                    {% icon 'minus' 'icon' %}
+                </button>
+                <button class="zoom-in-button option">
+                    {% icon 'plus' 'icon' %}
+                </button>
+            </div>
+        </div>
+
+        {% if is_users_room %}
+            <button class="option create-folder-button" title="Create folder">
+                {% icon 'folder-plus' 'icon' %}
+            </button>
+            <button class="option create-note-button" title="Create note">
+                {% icon 'file-plus' 'icon' %}
+            </button>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'scripts/utilities/helpers.js' %}"></script>
+    <script type="module" src="{% static 'scripts/taskbar.js' %}"></script>
+    <script type="module" src="{% static 'scripts/textEditor/taskbar.js' %}"></script>
+    <script type="module" src="{% static 'scripts/textEditor/search.js' %}"></script>
+    <script type="module" src="{% static 'scripts/textEditor/save.js' %}"></script>
+    
+    {% if is_users_room %}
+        <script type="module" src="{% static 'scripts/textEditor/editName.js' %}"></script>
+        <script type="module" src="{% static 'scripts/textEditor/permissions.js' %}"></script>
+    {% endif %}
+
+    <script type="module">
+        import { Canvas } from '/static/scripts/textEditor/canvas.js';
+
+        const editable = "{% if not room.is_editable and not is_users_room %}false{% else %}true{% endif %}" === "true";
+
+        new Canvas({
+            canvas: document.querySelector('.canvas-container canvas'),
+            overlay: document.querySelector('.canvas-container .overlay'),
+            noteId: "{{ note.id }}",
+            noteToken: "{{ note.token }}",
+            editable,
+            backgroundColor: "{% if note.canvas.background %}{{ note.canvas.background }}{% else %}#FBFCFF{% endif %}",
+        }); 
+    </script>
+
+    <script type="module">
+        const colorPickers = document.querySelectorAll('.color-picker');
+
+        class ColorPicker {
+            constructor(element) {
+                this.element = element;
+                this.hiddenInput = element.querySelector('input[type="hidden"]');
+                this.currentColor = this.hiddenInput.value;
+                this.element.style.backgroundColor = this.currentColor;
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                this.element.addEventListener('click', () => this.handleClick());
+            }
+
+            handleClick() {
+                if (this.supportsInputTypeColor()) {
+                    this.openNativeColorPicker();
+                } else {
+                    this.openFallbackColorPicker();
+                }
+            }
+
+            supportsInputTypeColor() {
+                const input = document.createElement('input');
+                input.setAttribute('type', 'color');
+                input.value = '!';
+
+                return input.value !== '!';
+            }
+
+            openNativeColorPicker() {
+                if (!this.colorInput) {
+                    this.colorInput = document.createElement('input');
+                    this.colorInput.setAttribute('type', 'color');
+                    this.colorInput.classList.add('hidden');
+                    this.colorInput.value = this.currentColor;
+                    
+                    this.colorInput.addEventListener('input', (e) => {
+                        this.updateColor(e.target.value);
+                    });
+
+                    this.colorInput.addEventListener('change', (e) => {
+                        this.updateColor(e.target.value);
+                        this.element.dispatchEvent(new CustomEvent('colorchange', {
+                            detail: {
+                                color: e.target.value
+                            }
+                        }));
+                    });
+                }
+
+                this.element.appendChild(this.colorInput);
+                this.colorInput.click();
+            }
+
+            openFallbackColorPicker() {
+                const hex = prompt('Enter a hex color code (e.g. #FF0000):', this.currentColor);
+                if (hex && this.isValidHex(hex)) {
+                    this.updateColor(hex);
+                    this.element.dispatchEvent(new CustomEvent('colorchange', {
+                        detail: {
+                            color: hex
+                        }
+                    }));
+                }
+            }
+
+            updateColor(color) {
+                this.currentColor = color;
+                this.hiddenInput.value = color;
+                this.element.style.backgroundColor = color;
+            }
+
+            isValidHex(hex) {
+                return /^#[0-9A-F]{6}$/i.test(hex);
+            }
+        }
+
+        colorPickers.forEach((picker) => new ColorPicker(picker));
+    </script>
+
+    <script type="module">
+        import { getNoteText } from '/static/scripts/api/getNoteText.js';
+
+        const folderHistory = document.querySelector('.resource-history');
+        folderHistory.scrollLeft = folderHistory.scrollWidth;
+
+        const noteToken = "{{ note.token }}";
+        const shouldEnableEditing = 
+            "{% if not room.is_editable and not is_users_room %}false{% else %}true{% endif %}" === "true";
+        const textLoadingIcon = document.querySelector('.text-loading-icon');
+
+        (async () => {
+            const response = await getNoteText({
+                noteToken,
+            });
+
+            const textArea = document.querySelector('.editor-text-area');
+            textArea.value = response.payload.text;
+            textArea.placeholder = "Write your text here...";
+            textLoadingIcon.classList.add('hidden');
+
+            if (shouldEnableEditing) {
+                textArea.removeAttribute('disabled');
+            }
+        })();
+    </script>
+
+    {% if note.display == 'canvas' %}
+        <script type="module">
+            document.querySelector('.switch-mode-button').click();
+        </script>
+    {% endif %}
+{% endblock %}

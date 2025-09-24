@@ -1,0 +1,63 @@
+@use '../abstracts' as ab
+
+.popup--wrapper
+    padding: 1rem
+    position: absolute
+    inset: 0
+    .popup_background
+        position: absolute
+        inset: 0
+        z-index: 2
+        background-color: #ffffff88
+        
+    .popup
+        position: relative
+        left: 50%
+        top: 50%
+        z-index: 5
+        transform: translate(-50%,-50%)
+        box-sizing: border-box
+        max-width: 400px 
+        min-height: 10rem
+        height: fit-content
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: space-between
+        padding: 1.5rem 2rem
+        background-color: #ffffff
+        border-radius: 0.8rem
+        box-shadow: 0px 0px 70px 0px rgba(0, 0, 0, 0.110)
+        .input
+            box-sizing: border-box
+            width: 100%
+            padding: 0.2rem 0.4rem
+            border-radius: 1rem
+                
+        .buttons-wrapper
+            width: 100%
+            display: grid
+            grid-template-columns: repeat(2, 1fr)
+            gap: 2rem
+            @include ab.custom_screen_max(300px)
+                grid-template-columns: 1fr
+                gap: 0.5rem
+            .cancel_btn
+                width: fit-content
+                justify-self: flex-end
+                @include ab.custom_screen_max(300px)
+                    width: 100%
+            .add_btn
+                justify-self: flex-start
+                @include ab.custom_screen_max(300px)
+                    width: 100%
+
+.progress_badge
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    padding: 0.8rem 1.5rem
+    background: #EFEFEF
+    border-radius: 2rem
+    white-space: nowrap

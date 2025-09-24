@@ -1,0 +1,11 @@
+.folder_navigation {
+  display: flex;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #eaeaea;
+  border-radius: 2rem;
+}
+.folder_navigation .slash {
+  margin: 0 0.3rem;
+  color: #000;
+}

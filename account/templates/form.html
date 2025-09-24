@@ -1,0 +1,49 @@
+{% load icons %}
+
+{% for field in form %}
+    <div class="input-container" data-name="{{ field.name }}">
+        <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        <div class="input">
+            {{ field }}
+            {% if field.field.widget.attrs.password_toggle %}
+                <div class="icon-container">
+                    {% icon 'eye-off' 'icon pointer' %}
+                </div>
+            {% elif field.field.widget.attrs.icon %}
+                <div class="icon-container">
+                    {% icon field.field.widget.attrs.icon 'icon' %}
+                </div>
+            {% endif %}
+        </div>
+        {% if field.errors %}
+            <div class="error">
+                {{ field.errors.0 }}
+            </div>
+        {% endif %}
+    </div>
+
+    {% if field.field.widget.attrs.password_toggle %}
+        <script type="module">
+            const inputContainer = document.querySelector('.input-container[data-name="{{ field.name }}"]');
+            const input = inputContainer.querySelector('input');
+            const icon = inputContainer.querySelector('.icon');
+            const icons = inputContainer.querySelectorAll('.icon');
+
+            icon.addEventListener('click', () => {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.innerHTML = `{% icon 'eye' 'icon pointer' %}`;
+                } else {
+                    input.type = 'password';
+                    icon.innerHTML = `{% icon 'eye-off' 'icon pointer' %}`;
+                }
+            });
+        </script>
+    {% endif %}
+{% endfor %}
+
+{% if form.non_field_errors %}
+    <div class="error">
+        {{ form.non_field_errors.0 }}
+    </div>
+{% endif %}

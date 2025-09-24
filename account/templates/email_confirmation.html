@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+    {% autoescape off %}
+        {{ meta_tags }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block refs %}
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="auth-page-wrapper">
+        <div class="auth-page-container">
+            <div class="logo">
+                <img class="image" src="{% static 'images/logo.png' %}" alt="Noteboard logo">
+                <div class="text">
+                    Noteboard
+                </div>
+            </div>
+            <div class="context">
+                Please enter the confirmation code sent to {{ email }}.
+            </div>
+            <form action="{% url 'email_confirmation_view' %}" method="post">
+                {% csrf_token %}
+
+                <div class="inputs">
+                    {% include "form.html" with form=form %}
+                    <button type="submit" class="button">
+                        Confirm
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

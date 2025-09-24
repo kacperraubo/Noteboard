@@ -1,0 +1,91 @@
+@use './abstracts' as ab
+
+.auth-page-wrapper
+    @include ab.flex($justify: center, $align: center)
+    width: 100vw
+    height: 100vh
+
+    .auth-page-container
+        @include ab.flex($direction: column, $gap: ab.$space-8, $align: center)
+        width: min(80vw, 400px)
+
+        .logo
+            @include ab.flex($direction: column, $gap: ab.$space-5)
+
+            .image
+                width: ab.$space-36
+
+            .text
+                width: 100%
+                font-size: ab.$text-xl
+                color: ab.$neutral-700
+                font-weight: 600
+                text-align: center
+
+        .context
+            text-align: center
+            font-size: ab.$text-xl
+            color: ab.$neutral-700
+            font-weight: 600
+
+        form
+            width: 100%
+
+        .inputs
+            @include ab.flex($direction: column, $gap: ab.$space-4)
+            width: 100%
+
+            .input-container
+                @include ab.flex($direction: column, $gap: ab.$space-2)
+                width: 100%
+
+                .label
+                    font-size: ab.$text-sm
+                    color: ab.$neutral-600
+
+                .input
+                    @include ab.flex($gap: ab.$space-2, $align: center)
+                    height: ab.$space-12
+                    padding: 0 ab.$space-4
+                    width: 100%
+                    border: 1px solid ab.$neutral-300
+                    border-radius: ab.$rounded-md
+
+                    input
+                        flex-grow: 1
+                        height: 100%
+                        background-color: transparent
+                        color: ab.$neutral-600
+
+                    .icon-container
+                        @include ab.flex($justify: center, $align: center)
+
+                        .icon
+                            width: ab.$space-5
+                            height: ab.$space-5
+                            color: ab.$neutral-500
+
+            .button
+                @include ab.transition-all
+                @include ab.flex($justify: center, $align: center)
+                width: 100%
+                height: ab.$space-12
+                border-radius: ab.$rounded-md
+                background-color: ab.$neutral-800
+                color: ab.$neutral-50
+
+                &:hover
+                    background-color: ab.$neutral-900
+
+        .footer
+            color: ab.$neutral-500
+            font-size: ab.$text-sm
+
+            .link
+                color: ab.$neutral-800
+                font-weight: 600
+                text-decoration: underline
+
+        .error
+            font-size: ab.$text-xs
+            color: ab.$red-500

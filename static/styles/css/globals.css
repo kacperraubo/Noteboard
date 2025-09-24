@@ -1,0 +1,703 @@
+.hidden_view {
+  display: none;
+}
+
+.showed_view {
+  display: block;
+}
+
+.popup--wrapper {
+  padding: 1rem;
+  position: absolute;
+  inset: 0;
+}
+.popup--wrapper .popup_background {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.5333333333);
+}
+.popup--wrapper .popup {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  max-width: 400px;
+  min-height: 10rem;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background-color: #ffffff;
+  border-radius: 0.8rem;
+  -webkit-box-shadow: 0px 0px 70px 0px rgba(0, 0, 0, 0.11);
+          box-shadow: 0px 0px 70px 0px rgba(0, 0, 0, 0.11);
+}
+.popup--wrapper .popup .input {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 100%;
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+}
+.popup--wrapper .popup .buttons-wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+@media (max-width: 300px) {
+  .popup--wrapper .popup .buttons-wrapper {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+.popup--wrapper .popup .buttons-wrapper .cancel_btn {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  justify-self: flex-end;
+}
+@media (max-width: 300px) {
+  .popup--wrapper .popup .buttons-wrapper .cancel_btn {
+    width: 100%;
+  }
+}
+.popup--wrapper .popup .buttons-wrapper .add_btn {
+  justify-self: flex-start;
+}
+@media (max-width: 300px) {
+  .popup--wrapper .popup .buttons-wrapper .add_btn {
+    width: 100%;
+  }
+}
+
+.progress_badge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  padding: 0.8rem 1.5rem;
+  background: #EFEFEF;
+  border-radius: 2rem;
+  white-space: nowrap;
+}
+
+.button, .button--second {
+  background: transparent;
+  border: 0;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button--primary {
+  white-space: nowrap;
+  border-radius: 2rem;
+  border: none;
+  padding: 0.3rem 1.25rem;
+  color: #0057ff;
+  background-color: #dedede;
+}
+
+.button--primary:hover {
+  white-space: nowrap;
+  background-color: #e4e3e3;
+  cursor: pointer;
+}
+
+.button--second {
+  border-radius: 1rem;
+  border-width: 0.1rem;
+  padding: 0.25rem 1rem;
+  background-color: #0094ff;
+}
+
+.button--second:hover {
+  background-color: #0085e4;
+}
+
+.error_message {
+  margin: 0.5rem;
+  color: red;
+}
+
+.task-bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.75rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 90vw;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  position: sticky;
+  bottom: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #232B3C;
+  overflow: auto;
+}
+.task-bar::-webkit-scrollbar {
+  display: none;
+}
+.task-bar.fixed {
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  position: fixed;
+  bottom: 1rem;
+}
+.task-bar .icon {
+  color: #FBFCFF;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.task-bar .option {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: transparent;
+}
+.task-bar .option:hover, .task-bar .option.active {
+  background-color: #0B1426;
+}
+.task-bar .search-bar {
+  max-width: 200px;
+  background-color: #424E66;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.25rem;
+  color: #FBFCFF;
+}
+.task-bar .search-bar::-webkit-input-placeholder {
+  color: #DDE0E5;
+}
+.task-bar .search-bar::-moz-placeholder {
+  color: #DDE0E5;
+}
+.task-bar .search-bar:-ms-input-placeholder {
+  color: #DDE0E5;
+}
+.task-bar .search-bar::-ms-input-placeholder {
+  color: #DDE0E5;
+}
+.task-bar .search-bar::placeholder {
+  color: #DDE0E5;
+}
+.task-bar .switch-mode-button {
+  background-color: #0B1426;
+}
+.task-bar .canvas-options {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1.5rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  height: 100%;
+  border-radius: 0.25rem;
+  background-color: #424E66;
+  padding: 0.25rem 0.5rem;
+}
+.task-bar .canvas-options .container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.5rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+}
+.task-bar .canvas-options .export-options-container span {
+  white-space: nowrap;
+  color: #DDE0E5;
+}
+.task-bar .canvas-options .export-options-container .export-button {
+  background-color: #424E66;
+}
+.task-bar .canvas-options .export-options-container .export-button:hover {
+  background-color: #232B3C;
+}
+.task-bar .canvas-options .export-options-container .cancel-export-button {
+  background-color: #EF1103;
+}
+.task-bar .canvas-options .export-options-container .cancel-export-button:hover {
+  background-color: #bd0d02;
+}
+.task-bar .canvas-options input[type=number] {
+  width: 2rem;
+  background-color: transparent;
+  padding: 0.125rem 0;
+  color: #DDE0E5;
+  border-bottom: 2px solid #DDE0E5;
+  text-align: center;
+  line-height: 1;
+  font-weight: bold;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0;
+}
+.task-bar .canvas-options .color-picker {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background-color: #DDE0E5;
+  outline: 2px solid #949FB6;
+  cursor: pointer;
+}
+.task-bar .canvas-options .icon {
+  height: 1.7rem;
+  width: 1.7rem;
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.task-bar .canvas-options .icon.selected {
+  background-color: rgba(35, 43, 60, 0.5);
+}
+.task-bar .canvas-options .text {
+  color: #DDE0E5;
+}
+.task-bar .canvas-options .option {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.5rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  background-color: #424E66;
+  color: #FBFCFF;
+  cursor: pointer;
+}
+.task-bar .canvas-options .option:hover {
+  background-color: #232B3C;
+}
+.task-bar .canvas-options .option .icon {
+  color: inherit;
+  margin-top: 0;
+}
+.task-bar .canvas-options .option.disabled {
+  color: #5F6D8A;
+  cursor: not-allowed;
+}
+.task-bar .canvas-options .option.disabled:hover {
+  background-color: #424E66;
+}
+.task-bar .canvas-options select {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  color: #DDE0E5;
+  cursor: pointer;
+}
+.task-bar .canvas-options select option {
+  background-color: #232B3C;
+}
+
+.navbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  position: relative;
+  width: 100%;
+  height: 5rem;
+  padding: 1rem 0;
+}
+.navbar .options {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.5rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+}
+.navbar .open-privacy-settings {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  display: none;
+  padding: 0.5rem;
+  color: #424E66;
+  background-color: transparent;
+  border-radius: 0.25rem;
+}
+.navbar .open-privacy-settings .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.navbar .open-privacy-settings:hover {
+  background-color: #DDE0E5;
+}
+.navbar .privacy-settings, .navbar .canvas-options {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.25rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+}
+.navbar .privacy-settings .privacy-setting, .navbar .privacy-settings .canvas-option, .navbar .canvas-options .privacy-setting, .navbar .canvas-options .canvas-option {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.5rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  color: #232B3C;
+  background-color: transparent;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+.navbar .privacy-settings .privacy-setting .icon, .navbar .privacy-settings .canvas-option .icon, .navbar .canvas-options .privacy-setting .icon, .navbar .canvas-options .canvas-option .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.navbar .privacy-settings .privacy-setting.active, .navbar .privacy-settings .canvas-option.active, .navbar .canvas-options .privacy-setting.active, .navbar .canvas-options .canvas-option.active {
+  color: #949FB6;
+}
+.navbar .privacy-settings .privacy-setting:hover, .navbar .privacy-settings .canvas-option:hover, .navbar .canvas-options .privacy-setting:hover, .navbar .canvas-options .canvas-option:hover {
+  background-color: #DDE0E5;
+}
+.navbar .privacy-settings .privacy-setting.disabled, .navbar .privacy-settings .canvas-option.disabled, .navbar .canvas-options .privacy-setting.disabled, .navbar .canvas-options .canvas-option.disabled {
+  color: #BDC4D3;
+  cursor: not-allowed;
+}
+.navbar .privacy-settings .privacy-setting.disabled:hover, .navbar .privacy-settings .canvas-option.disabled:hover, .navbar .canvas-options .privacy-setting.disabled:hover, .navbar .canvas-options .canvas-option.disabled:hover {
+  background-color: transparent;
+}
+.navbar .resource-history {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.5rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-right: 2.5rem;
+  padding-left: 2rem;
+  overflow: auto;
+}
+.navbar .resource-history::-webkit-scrollbar {
+  display: none;
+}
+.navbar .resource-history .separator {
+  color: #949FB6;
+}
+.navbar .resource-history .last-separator {
+  color: #424E66;
+}
+.navbar .resource-history .resource {
+  color: #949FB6;
+  white-space: nowrap;
+}
+.navbar .resource-history .resource.current {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.25rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  color: #424E66;
+  font-weight: 600;
+  cursor: pointer;
+}
+.navbar .resource-history .resource.current .edit-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  padding: 0.375rem;
+}
+.navbar .resource-history .resource.current .edit-button .icon {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #949FB6;
+}
+.navbar .resource-history .resource.current .edit-button:hover .icon {
+  color: #5F6D8A;
+}
+.navbar .logout-button, .navbar .login-button {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.25rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  position: absolute;
+  right: 0;
+  padding: 0.5rem;
+  color: #278BFF;
+  background-color: transparent;
+  border-radius: 0.25rem;
+}
+.navbar .logout-button .icon, .navbar .login-button .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.navbar .logout-button:hover, .navbar .login-button:hover {
+  background-color: rgba(147, 197, 255, 0.2);
+}
+@media (max-width: 768px) {
+  .navbar .logout-button, .navbar .login-button {
+    right: 0;
+  }
+  .navbar .logout-button span, .navbar .login-button span {
+    display: none;
+  }
+}
+.navbar.space-between {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.5rem;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  width: 100%;
+}
+.navbar.space-between .logout-button, .navbar.space-between .login-button {
+  position: relative;
+  -webkit-transform: none;
+          transform: none;
+  top: auto;
+  right: auto;
+}
+.navbar.space-between .resource-history {
+  margin-right: 0;
+  padding-left: 0;
+}
+@media (max-width: 768px) {
+  .navbar .privacy-settings, .navbar .canvas-options {
+    gap: 0;
+  }
+  .navbar .privacy-settings .privacy-setting span, .navbar .canvas-options .privacy-setting span {
+    display: none;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.disabled {
+  cursor: default;
+}
+
+.hidden {
+  display: none !important;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #F0F2F5;
+}
+
+button {
+  cursor: pointer;
+}/*# sourceMappingURL=globals.css.map */

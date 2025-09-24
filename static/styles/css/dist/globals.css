@@ -1,0 +1,168 @@
+.hidden_view {
+    display: none;
+}
+
+.showed_view {
+    display: block;
+}
+
+.popup--wrapper {
+    padding: 1rem;
+    position: absolute;
+    inset: 0;
+}
+
+.popup--wrapper .popup_background {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-color: #ffffff88;
+}
+
+.popup--wrapper .popup {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    max-width: 400px;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    border-radius: 0.8rem;
+    box-shadow: 0px 0px 70px 0px rgba(0, 0, 0, 0.11);
+}
+
+@media (max-width: 400px) {
+    .popup--wrapper .popup {
+        justify-content: space-between;
+    }
+}
+.popup--wrapper .popup .input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.2rem 0.4rem;
+}
+
+.popup--wrapper .popup .buttons-wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+@media (max-width: 400px) {
+    .popup--wrapper .popup .buttons-wrapper {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+}
+.button,
+.button--second {
+    background: transparent;
+    border: 0;
+    width: fit-content;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.button--primary {
+    white-space: nowrap;
+    border-radius: 2rem;
+    border: none;
+    padding: 0.4rem 1.25rem;
+    color: #0057ff;
+    background-color: #dedede;
+}
+
+.button--primary:hover {
+    white-space: nowrap;
+    background-color: #e4e3e3;
+    cursor: pointer;
+}
+
+.button--second {
+    border-radius: 1rem;
+    border-width: 0.1rem;
+    padding: 0.25rem 1rem;
+    background-color: #0094ff;
+}
+
+.button--second:hover {
+    background-color: #0085e4;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.disabled {
+    cursor: default;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    height: calc(100% - 1rem);
+    margin: 0;
+}
+
+body main {
+    height: inherit;
+    position: relative;
+    padding: 1rem;
+}
+
+body a {
+    color: #0057ff;
+    text-decoration: none;
+}
+
+body ul {
+    padding: 0;
+    margin: 0;
+}
+
+body li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+body .error_text {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+body .form_input input {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0.5rem;
+    height: 1.7rem;
+    font-size: 16px;
+    border-radius: 1rem;
+    border-style: solid;
+    border-width: 0.1rem;
+    padding: 0 0.8rem;
+}
+
+body .form_field {
+    margin-top: 1rem;
+}
+
+/*# sourceMappingURL=globals.css.map */

@@ -1,0 +1,36 @@
+.button, .button--second {
+  background: transparent;
+  border: 0;
+  width: fit-content;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button--primary {
+  white-space: nowrap;
+  border-radius: 2rem;
+  border: none;
+  padding: 0.3rem 1.25rem;
+  color: #0057ff;
+  background-color: #dedede;
+}
+
+.button--primary:hover {
+  white-space: nowrap;
+  background-color: #e4e3e3;
+  cursor: pointer;
+}
+
+.button--second {
+  border-radius: 1rem;
+  border-width: 0.1rem;
+  padding: 0.25rem 1rem;
+  background-color: #0094ff;
+}
+
+.button--second:hover {
+  background-color: #0085e4;
+}

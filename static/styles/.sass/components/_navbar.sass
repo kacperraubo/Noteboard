@@ -1,0 +1,138 @@
+@use '../abstracts' as ab
+
+.navbar
+    @include ab.flex($align: center, $justify: center)
+    position: relative
+    width: 100%
+    height: ab.$space-20
+    padding: ab.$space-4 0
+
+    .options
+        @include ab.flex($align: center, $gap: ab.$space-2)
+
+    .open-privacy-settings
+        @include ab.transition-all
+        @include ab.flex($align: center, $justify: center)
+        display: none
+        padding: ab.$space-2
+        color: ab.$neutral-700
+        background-color: transparent
+        border-radius: ab.$rounded-sm
+
+        .icon
+            width: ab.$space-5
+            height: ab.$space-5
+
+        &:hover
+            background-color: ab.$neutral-200
+
+    .privacy-settings, .canvas-options
+        @include ab.flex($align: center, $gap: ab.$space-1)
+
+        .privacy-setting, .canvas-option
+            @include ab.transition-all
+            @include ab.flex($align: center, $gap: ab.$space-2)
+            color: ab.$neutral-800
+            background-color: transparent
+            border-radius: ab.$rounded-sm
+            padding: ab.$space-2
+
+            .icon
+                width: ab.$space-5
+                height: ab.$space-5
+
+            &.active
+                color: ab.$neutral-500
+
+            &:hover
+                background-color: ab.$neutral-200
+
+            &.disabled
+                color: ab.$neutral-400
+                cursor: not-allowed
+
+                &:hover
+                    background-color: transparent
+
+    .resource-history
+        @include ab.flex($align: center, $gap: ab.$space-2)
+        @include ab.hidden-scrollbar
+        margin-right: ab.$space-10
+        padding-left: ab.$space-8
+        overflow: auto
+
+        .separator
+            color: ab.$neutral-500
+
+        .last-separator
+            color: ab.$neutral-700
+
+        .resource
+            color: ab.$neutral-500
+            white-space: nowrap
+
+            &.current
+                @include ab.flex($align: center, $gap: ab.$space-1)
+                color: ab.$neutral-700
+                font-weight: 600
+                cursor: pointer
+
+                .edit-button
+                    @include ab.flex($justify: center, $align: center)
+                    padding: ab.$space-1_5
+
+                    .icon
+                        @include ab.transition-all
+                        width: ab.$space-5
+                        height: ab.$space-5
+                        color: ab.$neutral-500
+
+                    &:hover
+                        .icon
+                            color: ab.$neutral-600
+
+    .logout-button, .login-button
+        @include ab.transition-all
+        @include ab.transform-half-y-axis
+        @include ab.flex($align: center, $gap: ab.$space-1)
+        position: absolute
+        right: 0
+        padding: ab.$space-2
+        color: ab.$primary-300
+        background-color: transparent
+        border-radius: ab.$rounded-sm
+
+        .icon
+            width: ab.$space-5
+            height: ab.$space-5
+
+        &:hover
+            background-color: transparentize(ab.$primary-100, 0.8)
+
+        @include ab.mobile
+            right: 0
+
+            span
+                display: none
+
+    &.space-between
+        @include ab.flex($justify: space-between, $align: center, $gap: ab.$space-2)
+        width: 100%
+
+        .logout-button, .login-button
+            position: relative
+            transform: none
+            top: auto
+            right: auto
+
+        .resource-history
+            margin-right: 0
+            padding-left: 0
+
+    @include ab.mobile
+        .privacy-settings, .canvas-options
+            gap: 0
+
+            .privacy-setting
+                span
+                    display: none
