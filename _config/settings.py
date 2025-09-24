@@ -26,10 +26,10 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get("DEBUG", "False") == "True" else False
 
-ALLOWED_HOSTS = ["note-board.app", os.environ.get("ALLOWED_HOST", "")]
+ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOST", "")]
 
 if DEBUG:
-    ALLOWED_HOSTS.extend(["127.0.0.1", "192.168.1.16"])
+    ALLOWED_HOSTS.extend(["127.0.0.1"])
 
 # Application definition
 
@@ -125,7 +125,7 @@ else:
     SECURE_BROWSER_XSS_FILTER = True
     SESSION_COOKIE_SECURE = True  # For http protocol it has to be set to False
     CSRF_COOKIE_SECURE = True  # For http protocol it has to be set to False
-    CSRF_TRUSTED_ORIGINS = ["https://note-board.app"]
+    CSRF_TRUSTED_ORIGINS = []
     X_FRAME_OPTIONS = "DENY"
 
 SESSION_COOKIE_AGE = 12 * 60 * 60
@@ -183,8 +183,3 @@ if os.environ.get("EMAIL_LOGGING") == "True":
 
 RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY")
 RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY")
-
-
-# WEBSYS WAF
-
-X_CUSTOM_AUTH_KEY = os.environ.get("X_CUSTOM_AUTH_KEY")
